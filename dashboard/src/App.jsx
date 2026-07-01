@@ -94,7 +94,7 @@ export function App() {
       body: JSON.stringify({ customer_id: "demo-customer", cart: ["sku-1", "sku-3"], context: "homepage" }),
     });
     const data = await response.json();
-    setRecommendations(data);
+    setRecommendations(response.ok ? data : { error: data.detail ?? "Request failed" });
     await Promise.all([refreshBalance(), refreshUsage()]);
   }
 
@@ -273,9 +273,13 @@ export function App() {
                   <button onClick={fetchRecommendations} className="rounded-lg bg-cyan-500 px-3 py-2 text-slate-950">Run Premium Call</button>
                 </div>
                 {recommendations ? (
-                  <div className="space-y-2 text-sm">
-                    {recommendations.suggestions.map((item) => <div key={item.product_id} className="rounded-lg border border-slate-800 p-3">{item.product_id} · {item.reason}</div>)}
-                  </div>
+                  recommendations.error ? (
+                    <div className="rounded-lg border border-rose-900 bg-rose-950/40 px-3 py-2 text-sm text-rose-200">{recommendations.error}</div>
+                  ) : (
+                    <div className="space-y-2 text-sm">
+                      {recommendations.suggestions.map((item) => <div key={item.product_id} className="rounded-lg border border-slate-800 p-3">{item.product_id} · {item.reason}</div>)}
+                    </div>
+                  )
                 ) : (
                   <div className="text-sm text-slate-400">Use the premium API to see recommendation results and credit usage.</div>
                 )}
