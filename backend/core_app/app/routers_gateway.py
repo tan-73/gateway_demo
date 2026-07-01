@@ -32,11 +32,13 @@ async def proxy_request(request: Request, upstream_url: str) -> Response:
     transport = None
     if parsed.netloc in upstream_apps:
         transport = httpx.ASGITransport(app=upstream_apps[parsed.netloc])
+    forward_headers = {k: v for k, v in request.headers.items() if k.lower() not in {"host", "accept-encoding"}}
+    forward_headers["accept-encoding"] = "identity"
     async with httpx.AsyncClient(transport=transport, timeout=10.0) as client:
         response = await client.request(
             method=request.method,
             url=upstream_url,
-            headers={k: v for k, v in request.headers.items() if k.lower() != "host"},
+            headers=forward_headers,
             content=await request.body(),
         )
     return Response(content=response.content, status_code=response.status_code, media_type=response.headers.get("content-type"))
