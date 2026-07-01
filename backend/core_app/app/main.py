@@ -39,9 +39,7 @@ async def lifespan(app: FastAPI):
     settings = get_settings()
     raw_keys = seed_defaults(
         db,
-        settings.public_upstream_url,
-        settings.standard_upstream_url,
-        settings.premium_upstream_url,
+        settings.mock_upstream_url,
         settings.demo_admin_email,
         settings.demo_admin_password,
     )

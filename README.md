@@ -11,7 +11,7 @@ The demo now uses a concrete storefront use case instead of generic echo APIs:
 ## Structure
 
 - `backend/core_app`: core FastAPI app for auth, gateway, admin API, scheduler, persistence, and tests
-- `backend/mock_upstream_*`: three mock upstream FastAPI apps
+- `backend/mock_upstream`: single mock upstream FastAPI app exposing public/standard/premium storefront APIs under prefixed routes
 - `dashboard`: React/Vite/Tailwind SPA
 
 ## Setup
@@ -20,15 +20,11 @@ The demo now uses a concrete storefront use case instead of generic echo APIs:
    - `pip install -r backend/core_app/requirements.txt`
 2. Install dashboard dependencies:
    - `npm install --prefix dashboard`
-3. Start the public upstream:
-   - `python -m uvicorn app.main:app --app-dir backend/mock_upstream_public --host 127.0.0.1 --port 8101 --reload`
-4. Start the standard upstream:
-   - `python -m uvicorn app.main:app --app-dir backend/mock_upstream_standard --host 127.0.0.1 --port 8102 --reload`
-5. Start the premium upstream:
-   - `python -m uvicorn app.main:app --app-dir backend/mock_upstream_premium --host 127.0.0.1 --port 8103 --reload`
-6. Start the core API:
+3. Start the mock upstream:
+   - `python -m uvicorn app.main:app --app-dir backend/mock_upstream --host 127.0.0.1 --port 8101 --reload`
+4. Start the core API:
    - `python -m uvicorn app.main:app --app-dir backend/core_app --host 127.0.0.1 --port 8000 --reload`
-7. Start the dashboard:
+5. Start the dashboard:
    - `npm run dev --prefix dashboard`
 
 ## Demo flow

@@ -268,7 +268,7 @@ def log_usage(db: Session, api_key_id: int, route_id: int, status_code: int, lat
     )
 
 
-def seed_defaults(db: Session, public_url: str, standard_url: str, premium_url: str, demo_admin_email: str, demo_admin_password: str) -> dict[str, str]:
+def seed_defaults(db: Session, upstream_url: str, demo_admin_email: str, demo_admin_password: str) -> dict[str, str]:
     if db.execute(select(Role)).first():
         return {}
     org = Organization(name="Demo Org")
@@ -292,13 +292,13 @@ def seed_defaults(db: Session, public_url: str, standard_url: str, premium_url: 
     db.flush()
     db.add_all(
         [
-            Route(path_pattern="/api/catalog/products", method="GET", category="public", base_credit_cost=1, base_rate_limit=5, base_rate_window_secs=60, upstream_url=f"{public_url}/products", active=True),
-            Route(path_pattern="/api/catalog/products/*", method="GET", category="public", base_credit_cost=1, base_rate_limit=5, base_rate_window_secs=60, upstream_url=f"{public_url}/products", active=True),
-            Route(path_pattern="/api/inventory/*", method="GET", category="standard", base_credit_cost=2, base_rate_limit=4, base_rate_window_secs=60, upstream_url=f"{standard_url}/inventory", active=True),
-            Route(path_pattern="/api/reviews/*", method="GET", category="standard", base_credit_cost=2, base_rate_limit=4, base_rate_window_secs=60, upstream_url=f"{standard_url}/reviews", active=True),
-            Route(path_pattern="/api/recommendations", method="POST", category="premium", base_credit_cost=4, base_rate_limit=2, base_rate_window_secs=60, upstream_url=f"{premium_url}/recommendations", active=True),
-            Route(path_pattern="/api/analytics/customer-segment/*", method="GET", category="premium", base_credit_cost=4, base_rate_limit=2, base_rate_window_secs=60, upstream_url=f"{premium_url}/analytics/customer-segment", active=True),
-            Route(path_pattern="/api/analytics/fail", method="GET", category="premium", base_credit_cost=4, base_rate_limit=2, base_rate_window_secs=60, upstream_url=f"{premium_url}/analytics/fail", active=True),
+            Route(path_pattern="/api/catalog/products", method="GET", category="public", base_credit_cost=1, base_rate_limit=5, base_rate_window_secs=60, upstream_url=f"{upstream_url}/public/products", active=True),
+            Route(path_pattern="/api/catalog/products/*", method="GET", category="public", base_credit_cost=1, base_rate_limit=5, base_rate_window_secs=60, upstream_url=f"{upstream_url}/public/products", active=True),
+            Route(path_pattern="/api/inventory/*", method="GET", category="standard", base_credit_cost=2, base_rate_limit=4, base_rate_window_secs=60, upstream_url=f"{upstream_url}/standard/inventory", active=True),
+            Route(path_pattern="/api/reviews/*", method="GET", category="standard", base_credit_cost=2, base_rate_limit=4, base_rate_window_secs=60, upstream_url=f"{upstream_url}/standard/reviews", active=True),
+            Route(path_pattern="/api/recommendations", method="POST", category="premium", base_credit_cost=4, base_rate_limit=2, base_rate_window_secs=60, upstream_url=f"{upstream_url}/premium/recommendations", active=True),
+            Route(path_pattern="/api/analytics/customer-segment/*", method="GET", category="premium", base_credit_cost=4, base_rate_limit=2, base_rate_window_secs=60, upstream_url=f"{upstream_url}/premium/analytics/customer-segment", active=True),
+            Route(path_pattern="/api/analytics/fail", method="GET", category="premium", base_credit_cost=4, base_rate_limit=2, base_rate_window_secs=60, upstream_url=f"{upstream_url}/premium/analytics/fail", active=True),
         ]
     )
     db.flush()

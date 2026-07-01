@@ -15,9 +15,7 @@ class Settings(BaseSettings):
     config_ttl_seconds: int = 5
     balance_ttl_seconds: int = 5
     scheduler_timezone: str = "UTC"
-    public_upstream_url: str = "http://127.0.0.1:8101"
-    standard_upstream_url: str = "http://127.0.0.1:8102"
-    premium_upstream_url: str = "http://127.0.0.1:8103"
+    mock_upstream_url: str = "http://127.0.0.1:8101"
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     model_config = SettingsConfigDict(env_prefix="GATEWAY_", extra="ignore")
 

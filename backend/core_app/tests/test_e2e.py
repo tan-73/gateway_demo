@@ -149,7 +149,7 @@ def test_full_happy_path(client: TestClient):
             "base_credit_cost": 1,
             "base_rate_limit": 5,
             "base_rate_window_secs": 60,
-            "upstream_url": "http://127.0.0.1:8101/products",
+            "upstream_url": "http://127.0.0.1:8101/public/products",
             "active": True,
         },
         headers={"Authorization": f"Bearer {admin_token}"},
