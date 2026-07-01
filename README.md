@@ -1,12 +1,32 @@
 # API Gateway Demonstration System
 
-Local-only API gateway demo built with FastAPI, SQLite, in-process rate limiting/cache state, APScheduler, and a React/Vite/Tailwind dashboard.
+API gateway demo built with FastAPI, SQLite, in-process rate limiting/cache state, APScheduler, and a React/Vite/Tailwind dashboard. Runs locally or hosted (Render + Vercel/Render static site).
 
-The demo now uses a concrete storefront use case instead of generic echo APIs:
+The demo uses a concrete storefront use case instead of generic echo APIs:
 
 - public catalog APIs for products
 - standard APIs for inventory and reviews
 - premium APIs for recommendations and customer-segment analytics
+
+## Live Demo
+
+**URL:** https://gateway-demo-2.onrender.com/
+
+> The backend runs on Render's free tier, which sleeps after ~15 minutes of inactivity. If the very first request feels slow (~30-50s), that's a cold start warming back up — refresh and it'll be fast from then on.
+
+### How to test
+
+1. Open the URL above.
+2. Log in as admin: `admin@gateway-demo.local` / `demo-admin-pass`.
+3. In the API Keys form, pick a user (e.g. `developer@demo.local`) and a plan (e.g. `Pro`), then click **Create API Key**.
+4. Copy the raw key shown once in the green banner.
+5. Click **Log Out**.
+6. Click the **Consumer API Key** tab, paste the key, click **Exchange API Key**.
+7. Catalog Preview should show 3 products (public tier).
+8. In Gateway Explorer, enter a product id (`sku-1`, `sku-2`, or `sku-3`) and click **Fetch** — Product / Inventory / Reviews should populate (standard tier).
+9. Click **Run Premium Call** — suggestions should appear and the Credits counter should drop (premium tier).
+10. Click **Fetch** or **Run Premium Call** repeatedly — you'll eventually see a rate-limit error banner instead of a result; it clears on the next successful call.
+11. Log back in as admin and click **Run Renewal** to see a `scheduled_renewal` entry appear in the Credit Ledger.
 
 ## Structure
 
@@ -14,7 +34,7 @@ The demo now uses a concrete storefront use case instead of generic echo APIs:
 - `backend/mock_upstream`: single mock upstream FastAPI app exposing public/standard/premium storefront APIs under prefixed routes
 - `dashboard`: React/Vite/Tailwind SPA
 
-## Setup
+## Local Development Setup
 
 1. Create a Python virtual environment and install backend dependencies:
    - `pip install -r backend/core_app/requirements.txt`
